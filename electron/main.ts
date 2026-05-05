@@ -1,28 +1,37 @@
-const { app, BrowserWindow, ipcMain } = require('electron/main')
-const path = require('node:path')
+import { app, BrowserWindow, ipcMain } from 'electron'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-let mainWindow = null
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+let mainWindow: BrowserWindow | null = null
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1440,
+    height: 900,
     frame: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.cjs'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: true
     }
   })
 
-  mainWindow.loadFile('index.html')
+  if (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
+  } else {
+    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+  }
 
   // Notify renderer when window is maximized/unmaximized
   mainWindow.on('maximize', () => {
-    mainWindow.webContents.send('window-maximized', true)
+    mainWindow?.webContents.send('window-maximized', true)
   })
 
   mainWindow.on('unmaximize', () => {
-    mainWindow.webContents.send('window-maximized', false)
+    mainWindow?.webContents.send('window-maximized', false)
   })
 }
 
