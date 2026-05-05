@@ -20,7 +20,7 @@ export function WindowTitlebar() {
 
   return (
     <div className="window-titlebar">
-      <span>Hello World!</span>
+      <span>Onix</span>
       <div className="window-controls">
         <button type="button" aria-label="Minimize" onClick={() => window.electronAPI?.minimize()}>
           <svg width="12" height="12" viewBox="0 0 12 12">
