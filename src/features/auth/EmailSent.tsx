@@ -1,25 +1,30 @@
-import { CheckCircle2 } from "lucide-react";
+import { Check } from "lucide-react";
 import { AuthLayout } from "./AuthLayout";
-import { Button } from "../../shared/ui/button";
+import emailSentIllustration from "./assets/email-sent-illustration.png";
 
 export function EmailSent({ onReset }: { onReset: () => void }) {
   return (
-    <AuthLayout>
-      <div className="text-center space-y-4">
-        <div className="w-16 h-16 mx-auto rounded-full bg-emerald-100 flex items-center justify-center">
-          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+    <AuthLayout illustrationSrc={emailSentIllustration} illustrationAlt="Email sent illustration">
+      <div className="flex w-full flex-col items-center gap-[20px] text-center">
+        <div className="flex size-[48px] items-center justify-center rounded-full bg-[#27ae60] p-[12px]">
+          <Check className="size-[24px] text-white" strokeWidth={2.5} />
         </div>
-        <div className="space-y-1">
-          <h1 className="text-2xl" style={{ fontWeight: 600 }}>¡Correo Enviado!</h1>
-          <p className="text-sm text-slate-500">
-            Revisa tu correo y sigue las instrucciones para restablecer tu contraseña
+
+        <div className="flex w-full flex-col gap-[4px]">
+          <h1 className="text-[20px] font-bold leading-[24px] text-[#0a1b39]">Email Sent!</h1>
+          <p className="text-[14px] leading-[21px] text-[#6c7688] opacity-70">
+            Check your email &amp; change your password
           </p>
         </div>
-        <Button onClick={onReset} className="w-full bg-violet-600 hover:bg-violet-700">
-          Restablecer Contraseña
-        </Button>
+
+        <button
+          type="button"
+          onClick={onReset}
+          className="flex h-[38px] w-full items-center justify-center rounded-[6px] bg-[#2e37a4] px-[12px] py-[8px] text-[14px] font-medium leading-[21px] text-white hover:bg-[#252d8a]"
+        >
+          Reset Password
+        </button>
       </div>
     </AuthLayout>
   );
 }
-

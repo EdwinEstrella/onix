@@ -1,11 +1,7 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { AuthLayout } from "./AuthLayout";
 import { SocialButtons } from "./SocialButtons";
-import { Input } from "../../shared/ui/input";
-import { Label } from "../../shared/ui/label";
-import { Button } from "../../shared/ui/button";
-import { Checkbox } from "../../shared/ui/checkbox";
 import { useAuth } from "../../shared/backend/AuthProvider";
 
 export function Login({
@@ -29,12 +25,12 @@ export function Login({
     setError(null);
 
     if (!isConfigured) {
-      setError("Supabase no esta configurado. Revisa VITE_SUPABASE_URL y VITE_SUPABASE_PUBLISHABLE_KEY.");
+      setError("Supabase no está configurado. Revisa VITE_SUPABASE_URL y VITE_SUPABASE_PUBLISHABLE_KEY.");
       return;
     }
 
     if (!email || !password) {
-      setError("Ingresa correo y contrasena para continuar.");
+      setError("Ingresa correo y contraseña para continuar.");
       return;
     }
 
@@ -43,8 +39,8 @@ export function Login({
       await signIn(email, password);
       onSignIn();
     } catch (authError) {
-      const message = authError instanceof Error ? authError.message : "No se pudo iniciar sesion.";
-      setError(message === "Invalid login credentials" ? "Correo o contrasena incorrectos." : message);
+      const message = authError instanceof Error ? authError.message : "No se pudo iniciar sesión.";
+      setError(message === "Invalid login credentials" ? "Correo o contraseña incorrectos." : message);
     } finally {
       setIsSubmitting(false);
     }
@@ -52,52 +48,78 @@ export function Login({
 
   return (
     <AuthLayout>
-      <div className="space-y-1 mb-6">
-        <h1 className="text-2xl" style={{ fontWeight: 600 }}>Iniciar Sesión</h1>
-        <p className="text-sm text-slate-500">Por favor ingresa tus datos para acceder a tu cuenta</p>
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
-          <Label className="text-xs text-slate-600">Correo Electrónico</Label>
-          <Input
-            type="email"
-            placeholder="Ingresa tu correo"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            disabled={isSubmitting}
-          />
+      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-[20px]">
+        <div className="flex w-full flex-col gap-[4px] text-center">
+          <h1 className="text-[20px] font-bold leading-[24px] text-[#0a1b39]">Sign In</h1>
+          <p className="text-[14px] leading-[21px] text-[#6c7688] opacity-70">
+            Please enter below details to access the dashboard
+          </p>
         </div>
-        <div className="space-y-1.5">
-          <Label className="text-xs text-slate-600">Contraseña</Label>
-          <div className="relative">
-            <Input
-              type={show ? "text" : "password"}
-              placeholder="Ingresa tu contraseña"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-              disabled={isSubmitting}
-            />
-            <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-              {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+
+        <div className="flex w-full flex-col gap-[20px]">
+          <div className="flex w-full flex-col gap-[4px]">
+            <label className="text-[14px] font-medium leading-[21px] text-[#0a1b39]">Email Address</label>
+            <div className="flex h-[36px] items-center gap-[8px] rounded-[6px] border border-[#e7e8eb] bg-white px-[12px] py-[6px] shadow-[0px_1px_0.5px_rgba(0,0,0,0.05)]">
+              <User className="size-[14px] shrink-0 text-[#0a1b39]" strokeWidth={1.75} />
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="Enter Email Address"
+                autoComplete="email"
+                disabled={isSubmitting}
+                className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[14px] leading-[21px] text-[#0a1b39] outline-none placeholder:text-[#9da4b0] disabled:opacity-60"
+              />
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col gap-[4px]">
+            <label className="text-[14px] font-medium leading-[21px] text-[#0a1b39]">Password</label>
+            <div className="flex h-[36px] items-center gap-[8px] rounded-[6px] border border-[#e7e8eb] bg-white px-[12px] py-[6px] shadow-[0px_1px_0.5px_rgba(0,0,0,0.05)]">
+              <Lock className="size-[14px] shrink-0 text-[#0a1b39]" strokeWidth={1.75} />
+              <input
+                type={show ? "text" : "password"}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="************"
+                autoComplete="current-password"
+                disabled={isSubmitting}
+                className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[14px] leading-[21px] text-[#0a1b39] outline-none placeholder:text-[#9da4b0] disabled:opacity-60"
+              />
+              <button type="button" onClick={() => setShow(!show)} className="text-[#0a1b39]" aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}>
+                {show ? <Eye className="size-[14px]" strokeWidth={1.75} /> : <EyeOff className="size-[14px]" strokeWidth={1.75} />}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex w-full items-center justify-between gap-[10px]">
+            <label className="flex items-center gap-[8px] text-[14px] leading-[21px] text-[#0a1b39]">
+              <span className="flex size-[16px] items-center justify-center rounded-[3px] bg-[#2e37a4] text-[11px] leading-none text-white">✓</span>
+              Remember Me
+            </label>
+            <button type="button" onClick={onForgot} className="text-right text-[14px] leading-[21px] text-[#ef1e1e]">
+              Forgot password?
             </button>
           </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-sm text-slate-600">
-            <Checkbox /> Recordarme
-          </label>
-          <button type="button" onClick={onForgot} className="text-sm text-violet-700">¿Olvidaste tu contraseña?</button>
-        </div>
-        {error && <div className="rounded-md bg-rose-50 px-3 py-2 text-xs text-rose-700">{error}</div>}
-        <Button type="submit" disabled={isSubmitting} className="w-full bg-violet-600 hover:bg-violet-700">
-          {isSubmitting ? "Iniciando..." : "Iniciar Sesión"}
-        </Button>
-        <SocialButtons />
-        <div className="text-center text-sm text-slate-600">
-          ¿No tienes una cuenta?{" "}
-          <button type="button" onClick={onRegister} className="text-violet-700" style={{ fontWeight: 600 }}>Registrarse</button>
+
+          {error && <div className="rounded-[6px] bg-[#fff1f1] px-[12px] py-[8px] text-[13px] leading-[19.5px] text-[#ef1e1e]">{error}</div>}
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex h-[38px] w-full items-center justify-center rounded-[6px] bg-[#2e37a4] px-[12px] py-[8px] text-[14px] font-medium leading-[21px] text-white hover:bg-[#252d8a] disabled:opacity-60"
+          >
+            {isSubmitting ? "Signing in..." : "Login"}
+          </button>
+
+          <SocialButtons />
+
+          <div className="text-center text-[14px] leading-[21px] text-[#0a1b39]">
+            Don’t have an account yet?{" "}
+            <button type="button" onClick={onRegister} className="text-[#2e37a4]">
+              Register
+            </button>
+          </div>
         </div>
       </form>
     </AuthLayout>
