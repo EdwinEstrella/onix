@@ -116,7 +116,12 @@ export default function App() {
       />
     );
   if (!session && authView === "register")
-    return <Register onLogin={() => setAuthView("email-otp")} />;
+    return (
+      <Register
+        onRegistered={() => setAuthView(null)}
+        onLogin={() => setAuthView("login")}
+      />
+    );
   if (!session && authView === "forgot")
     return (
       <ForgotPassword

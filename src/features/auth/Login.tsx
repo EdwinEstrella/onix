@@ -40,7 +40,13 @@ export function Login({
       onSignIn();
     } catch (authError) {
       const message = authError instanceof Error ? authError.message : "No se pudo iniciar sesión.";
-      setError(message === "Invalid login credentials" ? "Correo o contraseña incorrectos." : message);
+      if (message === "Invalid login credentials") {
+        setError("Correo o contraseña incorrectos.");
+      } else if (message === "Email not confirmed") {
+        setError("El correo no esta confirmado. Desactiva la confirmacion de email en Supabase Auth para permitir acceso inmediato.");
+      } else {
+        setError(message);
+      }
     } finally {
       setIsSubmitting(false);
     }

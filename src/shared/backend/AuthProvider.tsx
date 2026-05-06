@@ -12,6 +12,7 @@ type AuthContextValue = {
   authUser: User | null;
   appUser: AppUser | null;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshAppUser: () => Promise<void>;
 };
@@ -113,6 +114,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setSession(data.session);
         setAppUser(data.user ? await loadAppUser(data.user.id) : null);
+      },
+      async signUp(email, password, fullName) {
+        const { data, error } = await getSupabaseClient().auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+            },
+          },
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        setSession(data.session);
+        if (data.user?.id && data.session) {
+          try {
+            setAppUser(await loadAppUser(data.user.id));
+          } catch {
+            setAppUser(null);
+          }
+        } else {
+          setAppUser(null);
+        }
       },
       async signOut() {
         const { error } = await getSupabaseClient().auth.signOut();
