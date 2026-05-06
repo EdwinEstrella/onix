@@ -8,8 +8,10 @@ import {
   CalendarDays,
   ChevronDown,
   ChevronRight,
+  ClipboardList,
   CreditCard,
   FileText,
+  GitBranch,
   GraduationCap,
   LayoutDashboard,
   MessageSquare,
@@ -17,6 +19,7 @@ import {
   Palmtree,
   Receipt,
   Settings,
+  ShieldCheck,
   Stethoscope,
   Ticket,
   UserCircle,
@@ -39,6 +42,13 @@ type DashboardView =
   | "assets"
   | "activities"
   | "messages"
+  | "organizations"
+  | "users"
+  | "access-control"
+  | "profile-builder"
+  | "plans"
+  | "data-model"
+  | "project-plan"
   | "expenses"
   | "expense-category"
   | "income"
@@ -146,7 +156,21 @@ const sections: { title: string; items: NavItem[] }[] = [
   {
     title: "Administración",
     items: [
-      { label: "Usuarios", icon: UsersRound },
+      {
+        label: "Multi-tenant",
+        icon: GitBranch,
+        children: [
+          { label: "Hospitales y Sucursales", view: "organizations" },
+          { label: "Usuarios y Perfiles", view: "users" },
+          { label: "Crear Perfiles", view: "profile-builder" },
+          { label: "Permisos en Cascada", view: "access-control" },
+          { label: "Planes y Limites", view: "plans" },
+          { label: "Modelo de Datos", view: "data-model" },
+          { label: "Plan del Proyecto", view: "project-plan" },
+        ],
+      },
+      { label: "Usuarios", icon: UsersRound, view: "users" },
+      { label: "Roles y Permisos", icon: ShieldCheck, view: "access-control" },
       {
         label: "Reportes",
         icon: BarChart3,
@@ -163,7 +187,8 @@ const sections: { title: string; items: NavItem[] }[] = [
   {
     title: "Soporte",
     items: [
-      { label: "Configuración", icon: Settings },
+      { label: "Configuración", icon: Settings, view: "organizations" },
+      { label: "Roadmap", icon: ClipboardList, view: "project-plan" },
       { label: "Tickets", icon: Ticket },
     ],
   },
@@ -185,6 +210,7 @@ export function Sidebar({
     Panel: true,
     Doctores: true,
     Pacientes: true,
+    "Multi-tenant": true,
   });
 
   const toggleGroup = (label: string) => {

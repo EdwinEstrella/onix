@@ -37,6 +37,13 @@ import { Services } from "../features/operations/Services";
 import { Assets } from "../features/operations/Assets";
 import { Activities } from "../features/operations/Activities";
 import { Messages } from "../features/operations/Messages";
+import { Organizations } from "../features/administration/Organizations";
+import { Users } from "../features/administration/Users";
+import { AccessControl } from "../features/administration/AccessControl";
+import { ProjectPlan } from "../features/administration/ProjectPlan";
+import { ProfileBuilder } from "../features/administration/ProfileBuilder";
+import { Plans } from "../features/administration/Plans";
+import { DataModel } from "../features/administration/DataModel";
 
 type DashboardView =
   | "admin"
@@ -52,6 +59,13 @@ type DashboardView =
   | "assets"
   | "activities"
   | "messages"
+  | "organizations"
+  | "users"
+  | "access-control"
+  | "profile-builder"
+  | "plans"
+  | "data-model"
+  | "project-plan"
   | "expenses"
   | "expense-category"
   | "income"
@@ -155,6 +169,13 @@ export default function App() {
           {view === "assets" && <Assets />}
           {view === "activities" && <Activities />}
           {view === "messages" && <Messages />}
+          {view === "organizations" && <Organizations />}
+          {view === "users" && <Users />}
+          {view === "access-control" && <AccessControl />}
+          {view === "profile-builder" && <ProfileBuilder />}
+          {view === "plans" && <Plans />}
+          {view === "data-model" && <DataModel />}
+          {view === "project-plan" && <ProjectPlan />}
           {view === "expenses" && <Expenses />}
           {view === "expense-category" && <ExpenseCategory />}
           {view === "income" && <Income />}
