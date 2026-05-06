@@ -3,8 +3,11 @@ import type {
   Area,
   AuditLog,
   Branch,
+  ClinicalEncounter,
   DataModelEntity,
+  Doctor,
   Invoice,
+  Patient,
   Payment,
   PermissionGrant,
   Plan,
@@ -85,6 +88,10 @@ export const roles: Role[] = [
 
 export const permissionGrants: PermissionGrant[] = [
   { id: "perm_admin_all", tenantId: "tenant_trustcare", roleId: "role_tenant_admin", module: "users", actions: ["read", "create", "update", "delete", "export"], scope: "tenant" },
+  { id: "perm_admin_tenants", tenantId: "tenant_trustcare", roleId: "role_tenant_admin", module: "tenants", actions: ["read", "update", "export"], scope: "tenant" },
+  { id: "perm_admin_branches", tenantId: "tenant_trustcare", roleId: "role_tenant_admin", module: "branches", actions: ["read", "create", "update", "delete", "export"], scope: "tenant" },
+  { id: "perm_admin_reports", tenantId: "tenant_trustcare", roleId: "role_tenant_admin", module: "reports", actions: ["read", "export"], scope: "tenant" },
+  { id: "perm_admin_audit", tenantId: "tenant_trustcare", roleId: "role_tenant_admin", module: "audit", actions: ["read", "export"], scope: "tenant" },
   { id: "perm_doctor_clinical", tenantId: "tenant_trustcare", roleId: "role_doctor", module: "clinical_records", actions: ["read", "create", "update"], scope: "own" },
   { id: "perm_cashier_billing", tenantId: "tenant_trustcare", roleId: "role_cashier", module: "billing", actions: ["read", "create", "update", "export"], scope: "area", areaId: "area_cashier_lc" },
   { id: "perm_cashier_payments", tenantId: "tenant_trustcare", roleId: "role_cashier", module: "payments", actions: ["read", "create", "approve", "export"], scope: "area", areaId: "area_cashier_lc" },
@@ -102,6 +109,57 @@ export const userAssignments: UserAssignment[] = [
   { id: "assign_doctor", tenantId: "tenant_trustcare", userId: "user_doctor", roleId: "role_doctor", branchId: "branch_providencia", areaId: "area_cardiology_pv", createdAt: now, updatedAt: now },
 ];
 
+export const patients: Patient[] = [
+  {
+    id: "patient_001",
+    tenantId: "tenant_trustcare",
+    branchId: "branch_providencia",
+    medicalRecordNumber: "TRU-PV-0001",
+    fullName: "Alberto Ripley",
+    birthDate: "1999-02-12",
+    gender: "male",
+    primaryDoctorId: "doctor_001",
+    createdAt: "2026-02-24T10:15:00.000Z",
+    updatedAt: now,
+  },
+  {
+    id: "patient_002",
+    tenantId: "tenant_trustcare",
+    branchId: "branch_las_condes",
+    medicalRecordNumber: "TRU-LC-0002",
+    fullName: "Susan Babin",
+    birthDate: "2004-09-03",
+    gender: "female",
+    createdAt: "2026-04-15T14:10:00.000Z",
+    updatedAt: now,
+  },
+  {
+    id: "patient_003",
+    tenantId: "tenant_trustcare",
+    branchId: "branch_las_condes",
+    medicalRecordNumber: "TRU-LC-0003",
+    fullName: "Carol Lam",
+    birthDate: "1997-11-19",
+    gender: "female",
+    createdAt: "2026-05-01T09:20:00.000Z",
+    updatedAt: now,
+  },
+];
+
+export const doctors: Doctor[] = [
+  {
+    id: "doctor_001",
+    tenantId: "tenant_trustcare",
+    branchId: "branch_providencia",
+    userId: "user_doctor",
+    licenseNumber: "MED-CL-44127",
+    specialty: "Cardiologia",
+    publicBookingEnabled: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+];
+
 export const appointments: Appointment[] = [
   {
     id: "appt_001",
@@ -115,6 +173,22 @@ export const appointments: Appointment[] = [
     status: "confirmed",
     createdAt: now,
     updatedAt: now,
+  },
+];
+
+export const clinicalEncounters: ClinicalEncounter[] = [
+  {
+    id: "encounter_001",
+    tenantId: "tenant_trustcare",
+    branchId: "branch_providencia",
+    appointmentId: "appt_001",
+    patientId: "patient_001",
+    doctorId: "doctor_001",
+    reason: "Control cardiologico",
+    diagnosis: "Hipertension controlada",
+    lockedAt: "2026-05-08T14:00:00.000Z",
+    createdAt: "2026-05-08T13:05:00.000Z",
+    updatedAt: "2026-05-08T14:00:00.000Z",
   },
 ];
 

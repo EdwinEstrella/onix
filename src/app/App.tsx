@@ -44,6 +44,7 @@ import { ProjectPlan } from "../features/administration/ProjectPlan";
 import { ProfileBuilder } from "../features/administration/ProfileBuilder";
 import { Plans } from "../features/administration/Plans";
 import { DataModel } from "../features/administration/DataModel";
+import { useAuth } from "../shared/backend/AuthProvider";
 
 type DashboardView =
   | "admin"
@@ -92,43 +93,62 @@ type AuthView =
   | null;
 
 export default function App() {
+  const { isLoading, session, signOut } = useAuth();
   const [view, setView] = useState<DashboardView>("admin");
   const [showAddDoctor, setShowAddDoctor] = useState(false);
   const [showAddPatient, setShowAddPatient] = useState(false);
-  const [authView, setAuthView] = useState<AuthView>(null);
+  const [authView, setAuthView] = useState<AuthView>("login");
 
-  if (authView === "login")
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-slate-50 text-sm text-slate-500">
+        Cargando sesión...
+      </div>
+    );
+  }
+
+  if (!session && authView === "login")
     return (
       <Login
-        onSignIn={() => setAuthView("two-step")}
+        onSignIn={() => setAuthView(null)}
         onRegister={() => setAuthView("register")}
         onForgot={() => setAuthView("forgot")}
       />
     );
-  if (authView === "register")
+  if (!session && authView === "register")
     return <Register onLogin={() => setAuthView("email-otp")} />;
-  if (authView === "forgot")
+  if (!session && authView === "forgot")
     return (
       <ForgotPassword
         onSubmit={() => setAuthView("email-sent")}
         onBack={() => setAuthView("login")}
       />
     );
-  if (authView === "email-sent")
+  if (!session && authView === "email-sent")
     return <EmailSent onReset={() => setAuthView("reset-password")} />;
-  if (authView === "email-otp")
+  if (!session && authView === "email-otp")
     return <EmailOtpVerification onVerify={() => setAuthView("two-step")} />;
-  if (authView === "two-step")
+  if (!session && authView === "two-step")
     return <TwoStepVerification onSubmit={() => setAuthView(null)} />;
-  if (authView === "reset-password")
+  if (!session && authView === "reset-password")
     return (
       <ResetPassword
         onSubmit={() => setAuthView("success")}
         onBack={() => setAuthView("login")}
       />
     );
-  if (authView === "success")
+  if (!session && authView === "success")
     return <Success onLogin={() => setAuthView("login")} />;
+
+  if (!session) {
+    return (
+      <Login
+        onSignIn={() => setAuthView(null)}
+        onRegister={() => setAuthView("register")}
+        onForgot={() => setAuthView("forgot")}
+      />
+    );
+  }
 
   return (
     <div className="flex h-full w-full bg-slate-50 text-slate-900">
@@ -137,7 +157,10 @@ export default function App() {
         onViewChange={setView}
         onAddDoctor={() => setShowAddDoctor(true)}
         onAddPatient={() => setShowAddPatient(true)}
-        onLogout={() => setAuthView("login")}
+        onLogout={async () => {
+          await signOut();
+          setAuthView("login");
+        }}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />

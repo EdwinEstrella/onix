@@ -199,6 +199,7 @@ export function Sidebar({
   onViewChange,
   onAddDoctor,
   onAddPatient,
+  onLogout,
 }: {
   view: DashboardView;
   onViewChange: (v: DashboardView) => void;
@@ -338,6 +339,13 @@ export function Sidebar({
             </button>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={onLogout}
+          className="mt-[12px] h-[40px] w-full rounded-[6px] border border-[#e7e8eb] bg-white text-[14px] font-medium text-[#0a1b39] shadow-[0px_1px_0.5px_rgba(0,0,0,0.05)] hover:bg-[#f5f6f8]"
+        >
+          Cerrar sesión
+        </button>
       </div>
     </aside>
   );
